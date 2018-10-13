@@ -5,7 +5,7 @@ const TodoList = (props) => {
     let list = props.list.map((todo, index) => {
         return (
             <li key={index}>
-                <Checkbox onChange={(e) => props.statusChange(e, index)} checked={todo.finalizada}></Checkbox>
+                <Checkbox onChange={(e) => props.statusChange(e, index)} checked={todo.finalizado}></Checkbox>
                 {todo.tarea}
             </li>
         )

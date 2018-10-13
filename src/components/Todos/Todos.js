@@ -9,14 +9,13 @@ export default class Todos extends Component{
 
     constructor() {
         super();
+
         this.state = {
-            selectedFilter: null,
+            selectedFilter: "all",
             todoList: [
             ],
             todo: ""
         }
-        this.handleStatusChange = this.handleStatusChange.bind(this);
-        
     }
 
     handleInputChange(e) {
@@ -24,6 +23,7 @@ export default class Todos extends Component{
     }
 
     handleAddTodo() {
+        if (!this.state.todo.length) return;
         this.setState({ // Se utiliza setState, porque no se puede mutar state directamente
             todoList: this.state.todoList.concat({ // Se usa una concatenación, para tener un nuevo arreglo (valores pasados + valor nuevo)
                 tarea: this.state.todo,
@@ -40,11 +40,28 @@ export default class Todos extends Component{
         this.setState({ todoList: arregloFinal }); // Cambio mi estado de TodoList con la nueva referencia
     }
 
+    handleFilterChange = (filter) => {
+        this.setState({selectedFilter: filter})
+    }
 
     render() {
         let faltan = this.state.todoList.filter(todo => {
             return todo.finalizado === false;
         }).length;
+
+        let filteredTodoList = [];
+
+        switch (this.state.selectedFilter) {
+            case 'pending':
+                filteredTodoList = this.state.todoList.filter(todo => !todo.finalizado);
+                break;
+            case 'completed':
+                filteredTodoList = this.state.todoList.filter(todo => todo.finalizado);
+                break;
+            default: {
+                filteredTodoList = this.state.todoList;
+            }
+        }
         return (
             <div className="todos-container">
                 <Title text="Lista de tareas"></Title> {/* Componente funcional (stateless) con propiedad 'text' */}
@@ -61,9 +78,9 @@ export default class Todos extends Component{
                         </IconButton>
                     </div>
 
-                    <TodoList statusChange={this.handleStatusChange} list={this.state.todoList}></TodoList>  {/* Se manda como propiedad, el arreglo de tareas dentro de el estado de este componente */}
+                    <TodoList statusChange={this.handleStatusChange} list={filteredTodoList}></TodoList>  {/* Se manda como propiedad, el arreglo de tareas dentro de el estado de este componente */}
 
-                    <Filter missing={faltan}></Filter>
+                    <Filter filterChange={this.handleFilterChange} missing={faltan}></Filter>
                 </Card>
             </div>
         )

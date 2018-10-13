@@ -7,9 +7,9 @@ const Filter = (props) => {
         <div className="filter-container">
             <p>Faltan {props.missing}</p>
             <div>
-                <Button>Todos</Button>
-                <Button>Pendientes</Button>
-                <Button>Completados</Button>
+                <Button onClick={() => props.filterChange("all")}>Todos</Button>
+                <Button onClick={() => props.filterChange("pending")}>Pendientes</Button>
+                <Button onClick={() => props.filterChange("completed")}>Completados</Button>
             </div>
         </div>
     )
